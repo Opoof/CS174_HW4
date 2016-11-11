@@ -1,0 +1,12 @@
+-configs
+	-config.php
+-controllers
+	-controller.php
+-models
+	-model.php
+-styles
+	-style.css
+-views
+	-helpers
+	-Landing.php
+	-View.php
