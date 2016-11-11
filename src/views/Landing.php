@@ -1,7 +1,8 @@
 <?php   
+require_once("View.php");
 
 class Landing implements View{
-	static function render($data){
+	function render($data){
 		?>
 		<!DOCTYPE html>
 		<html>
@@ -16,4 +17,5 @@ class Landing implements View{
 	}
 }
 
-Landing->render(null);
+$land = new Landing();
+$land->render(null);
