@@ -1,0 +1,1 @@
+Exactly what's in the title: Get Composer's autoloader to work with what we have
