@@ -1,0 +1,4 @@
+-Figure out what tables are needed
+-Code for mySQL commands needed in php to create the tables
+-Create helper functions for mySQL commands
+-Figure out how the tables are used
