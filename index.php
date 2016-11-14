@@ -1,6 +1,5 @@
 <?php
-require_once("./src/views/LandingView.php");
-
+require_once("src/controllers/LandingController.php");
 
 if(false){
 	null;
