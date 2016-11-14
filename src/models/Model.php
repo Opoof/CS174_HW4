@@ -45,4 +45,8 @@ class Model{
 		$select->fetch();
 		return result;
 	}
+	
+	public function closeConn(){
+		$mysqli->close();
+	}
 }
