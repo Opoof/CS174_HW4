@@ -1,7 +1,7 @@
 <?php   
 require_once("View.php");
 
-class Landing implements View{
+class LandingView implements View{
 	function render($data){
 		$formatDescription = "The data format should be a comma separated list of values, one per line, up to 50 lines of at most 80 ".
 			"characters, representing points to be plotted. The first coordinate should represent a text label (can involve numbers but ".

@@ -1,5 +1,11 @@
 <?php
-require_once("./src/views/Landing.php");
+require_once("./src/views/LandingView.php");
 
-$land = new Landing();
-$land->render(array("primary" => true));
+
+if(false){
+	null;
+}
+else{
+	$controller = new LandingController();
+}
+$controller->processRequest();
