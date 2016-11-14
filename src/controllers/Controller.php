@@ -1,6 +1,5 @@
 <?php
 
-abstract class Controller{
-	public abstract function processRequest();
-	public abstract function getView();
+interface Controller{
+	public function processRequest();
 }

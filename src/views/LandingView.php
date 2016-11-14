@@ -21,13 +21,12 @@ class LandingView implements View{
 				<p class="header">Share your data in charts!</p>
 				
 				<form method="POST" id="landing" action="index.php">
-					<label for="textinput">Chart Title</label><br>
-					<textarea name="textinput" rows="14" cols="120" placeholder="<?php echo $formatDescription; ?>"></textarea><br>
-					<input name="submit" type="submit">					
+					<label for="textInput">Chart Title</label><br>
+					<textarea name="textInput" rows="14" cols="120" placeholder="<?php echo $formatDescription; ?>"></textarea><br>
+					<input name="submit" type="submit">
 				</form>
 			</body>
 		</html>
 		<?php
-		
 	}
 }

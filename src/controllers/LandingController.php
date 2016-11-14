@@ -1,11 +1,11 @@
 <?php
+require_once("./src/views/LandingView.php");
+require_once("Controller.php");
 
-public class LandingController extends Controller{
-		public function processRequest(){
-			null;
-		}
-		
-		public function getView(){
-			$view = new LandingView()
-		}
+class LandingController implements Controller{
+	public function processRequest(){
+		$data = [];
+		$landing = new LandingView();
+		$landing->render($data);
+	}
 }
