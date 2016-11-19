@@ -1,4 +1,7 @@
-<?php   
+<?php
+
+namespace roomMates\hw4\views;
+
 require_once("View.php");
 
 class LandingView implements View{
