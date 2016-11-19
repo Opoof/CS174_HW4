@@ -1,12 +1,18 @@
 -configs
-	-config.php
+	-config.php (Finished)
+	-CreateDB.php (Not sure if done)
 -controllers
-	-controller.php
+	-controller.php (Finished)
+	-GraphController.php ()
+	-LandingController.php ()
 -models
-	-model.php
+	-model.php (Mostly done)
+-resources (So far this is empty but might use it later)
 -styles
-	-style.css
+	-style.css (Might need changing)
 -views
-	-helpers
-	-Landing.php
-	-View.php
+	-helpers (Not sure what to put in here)
+		-Helper.php (empty ATM)
+	-GraphView.php (Need to do)
+	-LandingView.php (Mostly done)
+	-View.php (Finished)
