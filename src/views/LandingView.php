@@ -22,10 +22,32 @@ class LandingView implements View{
 				
 				<form method="POST" id="landing" action="index.php">
 					<label>Chart Title:</label>
-					<input name="title" type="text"><br><br>
-					<textarea name="data" rows="15" cols="120" placeholder="<?php echo $formatDescription; ?>"></textarea><br>
+					<input name="title" type="text" required><br><br>
+					<textarea name="data" rows="15" cols="120" required
+						placeholder="<?php echo $formatDescription; ?>"></textarea><br>
 					<input name="submit" type="submit" value="Share">
 				</form>
+				<?php 
+					if( isset($data["rc"]) ){
+						echo "<p>";
+						switch($data["rc"]){
+							case "null_label":
+								echo "Error: Chart has a null label";
+								break;
+							case "too_many_lines":
+								echo "Error: Data has more than 50 lines";
+								break;
+							case "too_many_chars":
+								echo "Error: Data has at least one line with more than 80 characters in it.";
+								break;
+							case "diff_num_of_args":
+								echo "Error: Chart has differing number of arguments per label.";
+								break;
+							default: ;
+						}
+						echo "</p>";
+					}
+				?>
 			</body>
 		</html>
 		<?php

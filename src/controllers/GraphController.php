@@ -2,26 +2,45 @@
 require_once("./src/views/GraphView.php");
 
 class GraphController{
-	private $tuple;
 	
 	public function processRequest(){
-		if($this->validate()){
+		$rc = $this->validate();
+		if($rc == "valid"){
 			$model = new Model();
-			$model->insert($tuple["md5"], $tuple["title"], $tuple["data"]);
+			$hash = hash('md5', $_REQUEST["data"]);
+			$model->insert($hash, $_REQUEST["title"], $_REQUEST["data"]);
+			
+			$result = $model->select2D($hash);			
+			
+			$model->closeConn();
+			
+			$graph = new GraphView();
+			$graph->render($result);
 		}
 		else{
-			throw new Exception("Data validation failed"); /*Except don't really, just cancel the operation and give the user a message*/
+			$landing = new LandingView();
+			$landing->render(array("rc" => $rc));
 		}
 	}
 	
 	public function validate(){
-		$data = $_REQUEST["data"];
+		$_REQUEST["data"] = ltrim(rtrim($_REQUEST["data"], "\x00..\x1F"),"\x00..\x1F");
 		
-		// ...
+		$array = preg_split("/\\r\\n|\\r|\\n/", $_REQUEST["data"]); 
+		if(count($array) > 50) return "too_many_lines";
 		
-		$tuple["md5"] = hash('md5', $data);
-		$tuple["title"] = $_REQUEST["title"];
-		$tuple["data"] = $data;
-		return true;
+		for($i = 0; $i < count($array); $i++){
+			if(strlen($array[$i]) > 80) return "too_many_chars";
+		}
+		
+		foreach($array as &$value) $value = explode(',', $value);
+		
+		$num_args = count($array[0]);
+		for($i = 1; $i < count($array); $i++){
+			if(is_null($array[$i][0])) return "null_label";
+			if(count($array[$i]) != $num_args) return "diff_num_of_args";
+		}
+
+		return "valid";
 	}
 }

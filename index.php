@@ -6,9 +6,13 @@ require_once("src/models/Model.php");
 
 if(isset($_REQUEST["submit"]) or isset($_REQUEST["arg2"])){
 	$controller = new GraphController();
+	$controller->processRequest();
 }
-else /* if(isset($_REQUEST["Landing"])) */{
+else{
 	$controller = new LandingController();
+	$controller->processRequest();
 }
-$controller->processRequest();
+
+// $model = new Model();
+// $model->insert("myHash", "myTitle", "hello,hi,grettings\ngoodbye,bye,go away");
 

@@ -10,7 +10,7 @@ class Model{
 	private $data;
 	private $result;
 	
-	function __construct(){
+	function __construct(){ // Singleton
 		$this->mysqli = new mysqli(SERVERNAME, USERNAME, PASSWORD);
 		if ($this->mysqli->connect_error) {
 		   throw new Exception("Failed to connect to MySQL: (" . $this->mysqli->connect_errno . ") " . 
@@ -47,13 +47,35 @@ class Model{
 	}
 	
 	public function select($md5){
-		$this->md5 = $hash;
+		$this->md5 = $md5;
 		$this->select->execute();
-		$this->select->fetch();
+		$this->select->fetch(); 
 		return $this->result;
 	}
 	
-	public function closeConn(){
-		$mysqli->close();
+	public function select2D($md5){
+		$result = $this->select($md5);
+		$data = $result["data"];
+		unset($result["data"]);
+		
+		$array = preg_split("/\\r\\n|\\r|\\n/", $data); 
+		foreach($array as &$value) $value = explode(',', $value);
+		
+		$result["cols"] = count($result);
+		$result["rows"] = count($array[0]);
+		
+		return array_merge($result, $array);
 	}
+	
+	public function closeConn(){
+		$this->mysqli->close();
+	}
+	
 }
+/*
+$output[0]["title"] = "myTitle"
+
+
+
+
+*/
