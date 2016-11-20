@@ -1,7 +1,8 @@
 <?php
 require_once("./src/views/GraphView.php");
+require_once("Controller.php");
 
-class GraphController{
+class GraphController implements Controller{
 	
 	public function processRequest(){
 		$rc = $this->validate();

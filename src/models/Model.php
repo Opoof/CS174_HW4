@@ -61,8 +61,8 @@ class Model{
 		$array = preg_split("/\\r\\n|\\r|\\n/", $data); 
 		foreach($array as &$value) $value = explode(',', $value);
 		
-		$result["cols"] = count($result);
-		$result["rows"] = count($array[0]);
+		$result["x's"] = count($array);
+		$result["y's"] = count($array[0])-1;
 		
 		return array_merge($result, $array);
 	}
