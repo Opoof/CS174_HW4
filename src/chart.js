@@ -40,7 +40,7 @@ function Chart(chart_id, data)
         'title_style' : 'font-size:24pt; text-align: center;',
             // CSS styles to apply to title text
         'type' : 'LineGraph', // currently, can be either a LineGraph or
-            //PointGraph
+            //PointGraph or Histogram or XML or JSON or JSONP
         'width' : 500 //width of area to draw into in pixels
     };
     for (var property_key in property_defaults) {
@@ -205,5 +205,37 @@ function Chart(chart_id, data)
             x += dx;
         }
         c.stroke();
+    }
+
+    p.drawHistogram = function(){
+        self.drawPointGraph();
+        var c = context;
+        c.beginPath();
+        var x = self.x_padding;
+        var dx = (self.width - 2*self.x_padding)/(Object.keys(data).length - 1);
+        var height = self.height - self.y_padding - self.tick_length;
+        var length = dx
+        c.lineWidth = self.line_width;
+        for (key in data) {
+            y = self.tick_length + height * (1 - (data[key] - self.min_value)/self.range);
+            var rectHeight = height - y;
+            c.rect(x, y, dx, )
+            x += dx;
+        }
+        c.stroke();
+
+    }
+
+    p.drawXMLData = function(){
+        
+
+    }
+
+    p.drawJSONData = function(){
+
+    }
+
+    p.drawJSONPData = function(){
+
     }
 }
