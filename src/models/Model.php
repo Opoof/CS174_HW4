@@ -11,39 +11,46 @@ class Model{
 	private $result;
 	
 	function __construct(){
-		$mysqli = new mysqli($servername, $username, $password);
-		if ($mysqli->connect_error) {
-		   throw new Exception("Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error .
-						"<br>You may have forgotten to create the DB. Try running CreateDB.php from the cmd");
+		$this->mysqli = new mysqli(SERVERNAME, USERNAME, PASSWORD);
+		if ($this->mysqli->connect_error) {
+		   throw new Exception("Failed to connect to MySQL: (" . $this->mysqli->connect_errno . ") " . 
+						$this->mysqli->connect_error .	"<br>You may have forgotten to create the DB. ".
+						"Try running CreateDB.php from the cmd");
 		} 
-		if($mysqli->query("use ".$database) !== TRUE){
-			throw new Exception("Error: " . $mysqli->error);
+		if($this->mysqli->query("use ". DB) !== TRUE){
+			throw new Exception("Error: " . $this->mysqli->error);
 		}
 		
-		if($select = $mysqli->prepare("SELECT * FROM Charts WHERE md5 = ?") and
-		$insert = $mysqli->prepare("INSERT INTO Charts VALUES(?,?,?)")){
-			$select->bind_param("s", $md5);
-			$select->bind_result($result["md5"], $result["title"], $result["data"]);
-			$insert->bind_param("sss", $md5, $title, $data);
+		if($this->select = $this->mysqli->prepare("SELECT * FROM Charts WHERE md5 = ?")){
+			$this->select->bind_param("s", $this->md5);
+			$this->select->bind_result($this->result["md5"], $this->result["title"], $this->result["data"]);
 		}
 		else{
-			throw new Exception("Failure to prepare SQL statements");
+			throw new Exception("Failure to prepare SELECT statement");
+		}
+		
+		
+		if($this->insert = $this->mysqli->prepare("INSERT INTO Charts VALUES(?,?,?)") ){
+			$this->insert->bind_param("sss", $this->md5, $this->title, $this->data);
+		}
+		else{
+			throw new Exception("Failure to prepare INSERT statement");
 		}
 		
 	}
 	
-	public function insert($hash, $chartTitle, $chartData){
-		$md5 = $hash;
-		$title = $chartTitle;
-		$data = $chartData;
-		$insert->execute();
+	public function insert($md5, $title, $data){
+		$this->md5 = $md5;
+		$this->title = $title;
+		$this->data = $data;
+		$this->insert->execute();
 	}
 	
-	public function select($hash){
-		$md5 = $hash;
-		$select->execute();
-		$select->fetch();
-		return result;
+	public function select($md5){
+		$this->md5 = $hash;
+		$this->select->execute();
+		$this->select->fetch();
+		return $this->result;
 	}
 	
 	public function closeConn(){
