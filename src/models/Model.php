@@ -1,4 +1,8 @@
 <?php
+
+namespace roomMates\hw4\models;
+use Mysqli;
+
 require_once("./src/configs/Config.php");
 
 class Model{
