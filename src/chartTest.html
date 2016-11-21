@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang = "en">
+	<head>
+		
+	</head>
+	<body>
+		
+
+		<div id="graph">
+			<p>Chart Drawing</p>
+		</div>
+		<div id="test">
+			
+		</div>
+
+		<script type="text/javascript" src="chart.js"></script>
+		<script>
+			graph = new Chart("graph", {"Jan":7, "Feb":20, "Dec":5}, {"title":"Test Chart - Month v Value"});
+			console.log(graph);
+			test = new Chart("test", {"Jan":7, "Feb":20, "Dec":5, "July":1, "August":10}, {"title":"Test Chart - Month v Value (Histogram)","type":"Histogram"});
+			graph.draw();
+			test.draw();
+		</script>
+	</body>
