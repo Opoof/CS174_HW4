@@ -7,8 +7,7 @@ require_once("Controller.php");
 
 class LandingController implements Controller{
 	public function processRequest(){
-		$data = [];
 		$landing = new LandingView();
-		$landing->render($data);
+		$landing->render(null);
 	}
 }
