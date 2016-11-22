@@ -22,7 +22,7 @@ class LandingView implements View{
 					function validateForm() {
 						var x = document.forms["inputForm"]["data"].value;
 						
-						var array = x.split("/\\r\\n|\\r|\\n/");
+						var array = x.split(/\r\n|\r|\n/);
 						if(array.length > 50){
 							alert("Data has more than 50 lines");
 							return false;
@@ -40,20 +40,12 @@ class LandingView implements View{
 							array[i] = array[i].split(",");
 						}
 						
-						/*
-						var str = "";
-						for(var i = 0; i < array.length; i++){
-							for(var j = 0; j< array[i].length; j++){
-								str += array[i][j]+"-";
-							}
-							str+="\n";
-						}
-						alert(str);
-						*/
+						
 						
 						var num_args = array[0].length;
+						//alert("num args: " + num_args);
 						for(var i = 0; i < array.length; i++){
-							if( array[i][o] == null){
+							if( array[i][0] == ""){
 								alert("At least one label is null");
 								return false;
 							}
@@ -61,9 +53,9 @@ class LandingView implements View{
 								alert("Different number of args");
 								return false;
 							}
-							for(var j = 0; j < array[i].length; j++){
+							for(var j = 1; j < array[i].length; j++){
 								if(isNaN( parseFloat(array[i][j]))){
-									alert("There exists at least one non-numeric value.");
+									alert("There exists at least one non-numeric value: "+array[i][j]);
 									return false;
 								}
 							}
