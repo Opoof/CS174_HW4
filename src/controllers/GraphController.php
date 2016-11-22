@@ -53,6 +53,9 @@ class GraphController implements Controller{
 		for($i = 1; $i < count($array); $i++){
 			if(is_null($array[$i][0])) return "null_label";
 			if(count($array[$i]) != $num_args) return "diff_num_of_args";
+			for($j = 1; $j < count($array[$i]); $j++){
+				if(!is_numeric($array[$i][$j])) return "not_numeric_val";
+			}
 		}
 
 		return "valid";

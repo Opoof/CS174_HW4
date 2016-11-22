@@ -17,14 +17,16 @@ class GraphView implements View{
 				</head>
 				<body>
 					<h1 class="header"><?php echo $data["md5"] . " " . $type;?> - PasteChart</h1>
-					<div id="graph">
-						<p>Chart Drawing</p>
-					</div>
 
 					<?php
 						if($type == "LineGraph" or 
 						   $type == "PointGraph" or 
 						   $type == "Histogram"){
+								?>
+									<div id="graph">
+										<p>Chart Drawing</p>
+									</div>
+								<?php
 								$input = "[";
 								for($j = 0; $j < $data['y\'s'] /*$j < 1*/; $j++){
 									$input = $input . "{";
@@ -61,12 +63,55 @@ class GraphView implements View{
 								graph.draw();
 							</script>
 					<?php }
-					else{
+					else if($type == "xml"){ 
+						$XMLstring = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE chart SYSTEM \"chart.dtd\">\r\n<chart>\r\n    <md5>{$data["md5"]}</md5>\r\n    <title>{$data["title"]}</title>";
+
+						for($i = 0; $i < (count($data) - 4); $i++){
+							$XMLstring = $XMLstring . "\r\n    <data>";
+							for($j = 0; $j < (count($data[$i])); $j++){
+								if($j == 0){
+									$XMLstring = $XMLstring . "\r\n        <x>{$data[$i][$j]}</x>";
+								} 
+								else {
+									$XMLstring = $XMLstring . "\r\n        <y>{$data[$i][$j]}</y>";
+								}
+							}
+							$XMLstring = $XMLstring . "\r\n    </data>";
+						}
+						$XMLstring = $XMLstring . "\r\n</chart>";
+						echo "<pre>", htmlentities($XMLstring),"</pre>"; 
+					}
+					else if($type == "json"){
+						$JSONstring = "{\r\n    \"chart\": {\r\n        \"md5\": \"{$data["md5"]}\",\r\n        \"title\": \"{$data["title"]}\",\r\n        \"data\": [";
+						for($i = 0; $i < (count($data) - 4); $i++){
+							$JSONstring = $JSONstring . "\r\n            {";
+							for($j = 0; $j < (count($data[$i])); $j++){
+								if($j == 0){
+									$JSONstring = $JSONstring . "\r\n                \"x\" : \"{$data[$i][$j]}\",";
+								} 
+								else if (count($data[$i])>2) {
+									if($j == 1){
+										$JSONstring = $JSONstring . "\r\n                \"y\" : [";
+									}
+										$JSONstring = $JSONstring . "\r\n                    \"{$data[$i][$j]}\"";
+									if($j != (count($data[$i])- 1 )){
+										$JSONstring = $JSONstring . ",";
+									}
+								}
+							}
+							if($i != (count($data) - 5)){
+								$JSONstring = $JSONstring . "\r\n                ]\r\n            },";
+							} else {
+								$JSONstring = $JSONstring . "\r\n                ]\r\n            }";
+							}
+						}
+						$JSONstring = $JSONstring . "\r\n        ]\r\n    }\r\n}";
+						echo "<pre>", htmlentities($JSONstring),"</pre>"; 
+					}
+					else if($type == "jsonp"){
 						
-						// show the xml/json/jsonp
-						?> <h1>This graph view is still under construction</h1><?php
-					
-					}?>
+					}
+					?>
 
 					<div>
 						<h2>Share your chart and data at the URLs below:</h2>
@@ -97,19 +142,19 @@ class GraphView implements View{
 							$arg1 = "xml";
 							$temp = "http://". $_SERVER['HTTP_HOST'] . 
 									"/?c=$c&a=$a&arg1=$arg1&arg2=". $data['md5'];
-							echo "<p>As a $arg1:<br>\n".
+							echo "<p>As $arg1 data:<br>\n".
 								 "<a href=\"$temp\">$temp</a></p>\n\n";
 								 
 							$arg1 = "json";
 							$temp = "http://". $_SERVER['HTTP_HOST'] . 
 									"/?c=$c&a=$a&arg1=$arg1&arg2=". $data['md5'];
-							echo "<p>As a $arg1:<br>\n".
+							echo "<p>As $arg1 data:<br>\n".
 								 "<a href=\"$temp\">$temp</a></p>\n\n";
 								 
 							$arg1 = "jsonp";
 							$temp = "http://". $_SERVER['HTTP_HOST'] . 
 									"/?c=$c&a=$a&arg1=$arg1&arg2=". $data['md5'];
-							echo "<p>As a $arg1:<br>\n".
+							echo "<p>As $arg1 data:<br>\n".
 								 "<a href=\"$temp\">$temp</a></p>\n\n";
 						?>
 

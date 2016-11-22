@@ -18,12 +18,66 @@ class LandingView implements View{
 		<html>
 			<head>
 				<link rel="stylesheet" type="text/css" href="src/styles/style.css">
+				<script>
+					function validateForm() {
+						var x = document.forms["inputForm"]["data"].value;
+						
+						var array = x.split("/\\r\\n|\\r|\\n/");
+						if(array.length > 50){
+							alert("Data has more than 50 lines");
+							return false;
+						}
+						
+						
+						for(var i = 0; i < array.length; i++){
+							if(array[i].length > 80){
+								alert("At least one row has more than 80 characters");
+								return false;
+							}
+						}
+						
+						for (var i = 0; i < array.length; i++){
+							array[i] = array[i].split(",");
+						}
+						
+						/*
+						var str = "";
+						for(var i = 0; i < array.length; i++){
+							for(var j = 0; j< array[i].length; j++){
+								str += array[i][j]+"-";
+							}
+							str+="\n";
+						}
+						alert(str);
+						*/
+						
+						var num_args = array[0].length;
+						for(var i = 0; i < array.length; i++){
+							if( array[i][o] == null){
+								alert("At least one label is null");
+								return false;
+							}
+							if( array[i].length != num_args ){
+								alert("Different number of args");
+								return false;
+							}
+							for(var j = 0; j < array[i].length; j++){
+								if(isNaN( parseFloat(array[i][j]))){
+									alert("There exists at least one non-numeric value.");
+									return false;
+								}
+							}
+						}
+
+						return true;	
+					}
+				</script>
 			</head>
 			<body>
 				<h1 class="header">PasteChart</h1>
 				<p class="header">Share your data in charts!</p>
 				
-				<form method="POST" id="landing" action="index.php">
+				<form name="inputForm" id="landing" action="index.php" onsubmit="return validateForm()" method="POST">
 					<label>Chart Title:</label>
 					<input name="title" type="text" required><br><br>
 					<textarea name="data" rows="15" cols="120" required
@@ -45,6 +99,8 @@ class LandingView implements View{
 								break;
 							case "diff_num_of_args":
 								echo "Error: Chart has differing number of arguments per label.";
+								break;
+							case "not_numeric_val": echo "Error: Chart has non-numeric values.";
 								break;
 							default: ;
 						}
