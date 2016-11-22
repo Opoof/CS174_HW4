@@ -51,7 +51,7 @@ class GraphView implements View{
 								
 							}
 							if($j < ($data['y\'s'] - 1)){
-								$input = $input . "},";
+								$input = $input . "}, ";
 							} else {
 								$input = $input . "}";
 							}
@@ -66,7 +66,7 @@ class GraphView implements View{
 					?>
 					<script type="text/javascript" src="chart.js"></script>
 					<script>
-						graph = new Chart("graph", <?php echo "{$input}"?> , {"title":{$data["title"]}});
+						graph = new Chart("graph", <?php echo "{$input}"?> , {"title":{$data["title"]}, "type":"{$something}"});
 						graph.draw();
 					</script>
 
