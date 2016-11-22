@@ -69,6 +69,29 @@ class GraphView implements View{
 						graph = new Chart("graph", <?php echo "{$input}"?> , {"title":{$data["title"]}});
 						graph.draw();
 					</script>
+
+					<div>
+						<h2>Share your chart and data at the URLs below:</h2>
+
+						<p>As a LineGraph:</p>
+						<!-- BASE_URL/?c=chart&a=show&arg1=LineGraph&arg2=XXXXX (Where XXXXX is md5 hash)-->
+
+						<p>As a PointGraph:</p>
+						<!-- BASE_URL/?c=chart&a=show&arg1=PointGraph&arg2=XXXXX (Where XXXXX is md5 hash)-->
+
+						<p>As a Histogram:</p>
+						<!-- BASE_URL/?c=chart&a=show&arg1=Histogram&arg2=XXXXX (Where XXXXX is md5 hash)-->
+
+						<p>As XML data:</p>
+						<!-- BASE_URL/?c=chart&a=show&arg1=xml&arg2=XXXXX (Where XXXXX is md5 hash)-->
+
+						<p>As JSON data:</p>
+						<!-- BASE_URL/?c=chart&a=show&arg1=json&arg2=XXXXX (Where XXXXX is md5 hash)-->
+
+						<p>As JSONP data:</p>
+						<!-- BASE_URL/?c=chart&a=show&arg1=jsonp&arg2=XXXXX&arg3=javascript_callback (Where XXXXX is md5 hash)-->
+
+					</div>
 				</body>
 			</html>
 		<?php

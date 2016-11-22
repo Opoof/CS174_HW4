@@ -84,7 +84,11 @@ function Chart(chart_id, dataArray)
         for(i=0; i < (dataArray.length); i++){
             dataObject = dataArray[i];
             this.data_color = colors[i];
-            self['draw' + self.type](dataObject);
+            if(self.type == "Histogram"){
+                self['draw' + self.type](dataObject, i);
+            } else {
+                self['draw' + self.type](dataObject);
+            }
             console.log(3);
         }
         
@@ -136,7 +140,7 @@ function Chart(chart_id, dataArray)
         c.beginPath();
         c.moveTo(self.x_padding - self.tick_length,
             self.height - self.y_padding);
-        c.lineTo(self.width - self.x_padding,  height);  // x axis
+        c.lineTo((self.width - self.x_padding),  height);  // x axis
         c.stroke();
         c.beginPath();
         c.moveTo(self.x_padding, self.tick_length);
@@ -162,8 +166,8 @@ function Chart(chart_id, dataArray)
             c.stroke();
         }
         // Draw x ticks and values
-        var dx = (self.width - 2 * self.x_padding) /
-            (Object.keys(data).length - 1);
+        var dx = (self.width - 2 * self.x_padding)/
+            (Object.keys(data).length);
         var x = self.x_padding;
         for (key in data) {
             c.font = self.tick_font_size + "px serif";
@@ -185,7 +189,7 @@ function Chart(chart_id, dataArray)
         //self.initMinMaxRange();
         //self.renderAxes();
         var dx = (self.width - 2*self.x_padding) /
-            (Object.keys(data).length - 1);
+            (Object.keys(data).length);
         var c = context;
         c.lineWidth = self.line_width;
         c.strokeStyle = self.data_color;
@@ -210,7 +214,7 @@ function Chart(chart_id, dataArray)
         c.beginPath();
         var x = self.x_padding;
         var dx =  (self.width - 2*self.x_padding) /
-            (Object.keys(data).length - 1);
+            (Object.keys(data).length);
         var height = self.height - self.y_padding  - self.tick_length;
         c.moveTo(x, self.tick_length + height * (1 -
             (data[self.start] - self.min_value)/self.range));
@@ -223,18 +227,20 @@ function Chart(chart_id, dataArray)
         c.stroke();
     }
 
-    p.drawHistogram = function(data){
-        self.drawPointGraph();
+    p.drawHistogram = function(data, offset){
+        //self.drawPointGraph(data);
         var c = context;
         c.beginPath();
-        var x = self.x_padding;
-        var dx = (self.width - 2*self.x_padding)/(Object.keys(data).length - 1);
-        var height = self.height - self.y_padding - self.tick_length;
         c.lineWidth = self.line_width;
+        c.strokeStyle = self.data_color;
+        c.fillStyle = self.data_color;
+        var dx = (self.width - 2*self.x_padding)/(Object.keys(data).length);
+        var x = self.x_padding + (offset * (dx/dataArray.length));
+        var height = self.height - self.y_padding - self.tick_length;
         for (key in data) {
             y = self.tick_length + height * (1 - (data[key] - self.min_value)/self.range);
             var rectHeight = height - (y - self.tick_length);
-            c.rect(x, y, dx, rectHeight);
+            c.rect(x, y, dx/dataArray.length, rectHeight);
             x += dx;
         }
         c.stroke();
