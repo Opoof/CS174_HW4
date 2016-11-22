@@ -12,7 +12,7 @@
  * @param Object (optional) properties override values for any of the
  *      properties listed in the property_defaults variable below
  */
-function Chart(chart_id, dataArray)
+function Chart(chart_id, data)
 {
     var self = this;
     var p = Chart.prototype;
@@ -35,13 +35,14 @@ function Chart(chart_id, dataArray)
         'point_radius' : 3, //radius of points that are plot in point graph
         'tick_length' : 10, // length of tick marks along axes
         'ticks_y' : 5, // number of tick marks to use for the y axis
-        'tick_font_size' : 15, //size of font to use when labeling ticks
+        'tick_font_size' : 10, //size of font to use when labeling ticks
         'title' : '', // title text appears at top
         'title_style' : 'font-size:24pt; text-align: center;',
             // CSS styles to apply to title text
         'type' : 'LineGraph', // currently, can be either a LineGraph or
             //PointGraph or Histogram or XML or JSON or JSONP
         'width' : 500 //width of area to draw into in pixels
+        'x_values' : 1
     };
     for (var property_key in property_defaults) {
         if (typeof properties[property_key] !== 'undefined') {
@@ -63,56 +64,40 @@ function Chart(chart_id, dataArray)
     var context = canvas.getContext("2d");
     canvas.width = this.width;
     canvas.height = this.height;
-    this.dataArray = dataArray;
-    var dataObject;
-    var colors = ['rgb(0,0,255)', 'rgb(255,0,255)','rgb(0,255,255)','rgb(255,0,0)','rgb(0,255,0)']
+    this.data = data;
+
     /**
      * Main function used to draw the graph type selected
      */
     p.draw = function()
     {
-        console.log(1);
-        var dataObject = dataArray[0];
-        self.min_value = null;
-        self.max_value = null;
-        for(i=0; i < (dataArray.length); i++){
-            dataObject = dataArray[i];
-            self.initMinMaxRange(dataObject);
-            console.log(2);
-        }
-        self.renderAxes(dataObject);
-        for(i=0; i < (dataArray.length); i++){
-            dataObject = dataArray[i];
-            this.data_color = colors[i];
-            if(self.type == "Histogram"){
-                self['draw' + self.type](dataObject, i);
-            } else {
-                self['draw' + self.type](dataObject);
-            }
-            console.log(3);
-        }
-        
+        self['draw' + self.type]();
     }
     /**
      * Used to store in fields the min and max y values as well as the start
      * and end x keys, and the range = max_y - min_y
      */
-    p.initMinMaxRange = function(data)
+    p.initMinMaxRange = function()
     {
+        self.min_value = null;
+        self.max_value = null;
         self.start;
         self.end;
         var key;
-        for (key in data) {
-            if (self.min_value === null) {
-                self.min_value = data[key];
-                self.max_value = data[key];
-                self.start = key;
-            }
-            if (data[key] < self.min_value) {
-                self.min_value = data[key];
-            }
-            if (data[key] > self.max_value) {
-                self.max_value = data[key];
+        var datastructure;
+        for (datastructure in data)
+            for (key in datastructure) {
+                if (self.min_value === null) {
+                    self.min_value = data[key];
+                    self.max_value = data[key];
+                    self.start = key;
+                }
+                if (data[key] < self.min_value) {
+                    self.min_value = data[key];
+                }
+                if (data[key] > self.max_value) {
+                    self.max_value = data[key];
+                }
             }
         }
         self.end = key;
@@ -131,7 +116,7 @@ function Chart(chart_id, dataArray)
     /**
      * Draws the x and y axes for the chart as well as ticks marks and values
      */
-    p.renderAxes = function(data)
+    p.renderAxes = function()
     {
         var c = context;
         var height = self.height - self.y_padding;
@@ -140,11 +125,16 @@ function Chart(chart_id, dataArray)
         c.beginPath();
         c.moveTo(self.x_padding - self.tick_length,
             self.height - self.y_padding);
-        c.lineTo((self.width - self.x_padding),  height);  // x axis
+        c.lineTo(self.width - self.x_padding,  height);  // x axis
         c.stroke();
         c.beginPath();
         c.moveTo(self.x_padding, self.tick_length);
         c.lineTo(self.x_padding, self.height - self.y_padding +
+            self.tick_length);  // y axis
+        c.stroke();
+        c.beginPath();
+        c.moveTo(self.x_padding + self.width, self.tick_length);
+        c.lineTo(self.x_padding + self.width, self.height - self.y_padding +
             self.tick_length);  // y axis
         c.stroke();
         var spacing_y = self.range/self.ticks_y;
@@ -166,8 +156,8 @@ function Chart(chart_id, dataArray)
             c.stroke();
         }
         // Draw x ticks and values
-        var dx = (self.width - 2 * self.x_padding)/
-            (Object.keys(data).length);
+        var dx = (self.width - 2 * self.x_padding) /
+            (Object.keys(data).length - 1);
         var x = self.x_padding;
         for (key in data) {
             c.font = self.tick_font_size + "px serif";
@@ -184,12 +174,12 @@ function Chart(chart_id, dataArray)
     /**
      * Draws a chart consisting of just x-y plots of points in data.
      */
-    p.drawPointGraph = function(data)
+    p.drawPointGraph = function()
     {
-        //self.initMinMaxRange();
-        //self.renderAxes();
+        self.initMinMaxRange();
+        self.renderAxes();
         var dx = (self.width - 2*self.x_padding) /
-            (Object.keys(data).length);
+            (Object.keys(data).length - 1);
         var c = context;
         c.lineWidth = self.line_width;
         c.strokeStyle = self.data_color;
@@ -207,14 +197,14 @@ function Chart(chart_id, dataArray)
      * Draws a chart consisting of x-y plots of points in data, each adjacent
      * point pairs connected by a line segment
      */
-    p.drawLineGraph = function(data)
+    p.drawLineGraph = function()
     {
-        self.drawPointGraph(data);
+        self.drawPointGraph();
         var c = context;
         c.beginPath();
         var x = self.x_padding;
         var dx =  (self.width - 2*self.x_padding) /
-            (Object.keys(data).length);
+            (Object.keys(data).length - 1);
         var height = self.height - self.y_padding  - self.tick_length;
         c.moveTo(x, self.tick_length + height * (1 -
             (data[self.start] - self.min_value)/self.range));
@@ -227,20 +217,21 @@ function Chart(chart_id, dataArray)
         c.stroke();
     }
 
-    p.drawHistogram = function(data, offset){
-        //self.drawPointGraph(data);
+    p.calculateWidth = function(){
+
+    }
+    p.drawHistogram = function(){
+        self.drawPointGraph();
         var c = context;
         c.beginPath();
-        c.lineWidth = self.line_width;
-        c.strokeStyle = self.data_color;
-        c.fillStyle = self.data_color;
-        var dx = (self.width - 2*self.x_padding)/(Object.keys(data).length);
-        var x = self.x_padding + (offset * (dx/dataArray.length));
+        var x = self.x_padding;
+        var dx = (self.width - 2*self.x_padding)/(Object.keys(data).length - 1);
         var height = self.height - self.y_padding - self.tick_length;
+        c.lineWidth = self.line_width;
         for (key in data) {
             y = self.tick_length + height * (1 - (data[key] - self.min_value)/self.range);
             var rectHeight = height - (y - self.tick_length);
-            c.rect(x, y, dx/dataArray.length, rectHeight);
+            c.rect(x, y, dx, rectHeight);
             x += dx;
         }
         c.stroke();
