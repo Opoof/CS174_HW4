@@ -1,6 +1,6 @@
 <?php
 
-namespace roomMates\hw4\controllers;
+//namespace roomMates\hw4\controllers;
 
 require_once("./src/views/GraphView.php");
 require_once("Controller.php");
@@ -8,22 +8,32 @@ require_once("Controller.php");
 class GraphController implements Controller{
 	
 	public function processRequest(){
-		$rc = $this->validate();
-		if($rc == "valid"){
+		if(isset($_GET["arg1"]) and isset($_GET["arg2"])){
 			$model = new Model();
-			$hash = hash('md5', $_REQUEST["data"]);
-			$model->insert($hash, $_REQUEST["title"], $_REQUEST["data"]);
-			
-			$result = $model->select2D($hash);			
-			
+			$result = $model->select2D($_GET["arg2"]);							
 			$model->closeConn();
 			
 			$graph = new GraphView();
 			$graph->render($result);
 		}
 		else{
-			$landing = new LandingView();
-			$landing->render(array("rc" => $rc));
+			$rc = $this->validate();
+			if($rc == "valid"){
+				$model = new Model();
+				$hash = hash('md5', $_REQUEST["data"]);
+				$model->insert($hash, $_REQUEST["title"], $_REQUEST["data"]);
+				
+				$result = $model->select2D($hash);			
+				
+				$model->closeConn();
+				
+				$graph = new GraphView();
+				$graph->render($result);
+			}
+			else{
+				$landing = new LandingView();
+				$landing->render(array("rc" => $rc));
+			}
 		}
 	}
 	

@@ -1,7 +1,7 @@
 <?php
 
-namespace roomMates\hw4\models;
-use Mysqli;
+//namespace roomMates\hw4\models;
+//use Mysqli;
 
 require_once("./src/configs/Config.php");
 
@@ -32,6 +32,7 @@ class Model{
 		else{
 			throw new Exception("Failure to prepare SELECT statement");
 		}
+		
 		
 		
 		if($this->insert = $this->mysqli->prepare("INSERT INTO Charts VALUES(?,?,?)") ){
