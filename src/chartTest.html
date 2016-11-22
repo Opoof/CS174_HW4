@@ -1,24 +1,21 @@
 <!DOCTYPE html>
 <html lang = "en">
-	<head>
-		
-	</head>
+	<head></head>
 	<body>
+		<div id="graph"></div>
+		<div id="test"></div>
 		
-
-		<div id="graph">
-			<p>Chart Drawing</p>
-		</div>
-		<div id="test">
-			
-		</div>
-
 		<script type="text/javascript" src="chart.js"></script>
 		<script>
-			graph = new Chart("graph", {"Jan":7, "Feb":20, "Dec":5}, {"title":"Test Chart - Month v Value"});
+			graph = new Chart("graph", 
+							[{"Jan":15, "Feb":10, "Dec":37}, 
+								{"Jan":12, "Feb":25, "Dec":10}, 
+								{"Jan":2, "Feb":5, "Dec":1}], 
+							{"title":"Test Chart - Month v Value", "type":"PointGraph"});
 			console.log(graph);
-			test = new Chart("test", {"Jan":7, "Feb":20, "Dec":5, "July":1, "August":10}, {"title":"Test Chart - Month v Value (Histogram)","type":"Histogram"});
+			//test = new Chart("test", [{"Jan":15, "Feb":10, "Dec":37}, {"Jan":12, "Feb":25, "Dec":10}, {"Jan":2, "Feb":5, "Dec":1}], {"title":"Test Chart - Month v Value (Histogram)","type":"Histogram"});
 			graph.draw();
-			test.draw();
+			//test.draw();
 		</script>
 	</body>
+</html>

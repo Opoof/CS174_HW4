@@ -1,6 +1,6 @@
 <?php
 
-namespace roomMates\hw4\controllers;
+//namespace roomMates\hw4\controllers;
 
 require_once("./src/views/LandingView.php");
 require_once("Controller.php");

@@ -1,6 +1,6 @@
 <?php
 
-namespace roomMates\hw4\views;
+//namespace roomMates\hw4\views;
 
 require_once("View.php");
 

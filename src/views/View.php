@@ -1,6 +1,6 @@
 <?php 
 
-namespace roomMates\hw4\views;
+//namespace roomMates\hw4\views;
 
 // Declaration for the View interface
 interface View{
